@@ -3,26 +3,26 @@ package npm
 import (
 	"os/exec"
 
-	ahoy_targets "gitlab.com/hidothealth/platform/ahoy/src/target"
+	zen_targets "github.com/zen-io/zen-core/target"
 )
 
 type TypescriptBuildConfig struct {
 	Out string `mapstructure:"out"`
-	ahoy_targets.BuildFields
+	zen_targets.BuildFields
 }
 
-func (tsc TypescriptBuildConfig) GetTargets(tcc *ahoy_targets.TargetConfigContext) ([]*ahoy_targets.Target, error) {
-	return []*ahoy_targets.Target{
-		ahoy_targets.NewTarget(
+func (tsc TypescriptBuildConfig) GetTargets(tcc *zen_targets.TargetConfigContext) ([]*zen_targets.Target, error) {
+	return []*zen_targets.Target{
+		zen_targets.NewTarget(
 			tsc.Name,
-			ahoy_targets.WithSrcs(map[string][]string{"_srcs": tsc.Srcs}),
-			ahoy_targets.WithOuts([]string{tsc.Out}),
-			ahoy_targets.WithPassEnv(tsc.PassEnv),
-			ahoy_targets.WithEnvVars(tsc.Env),
-			ahoy_targets.WithVisibility(tsc.Visibility),
-			ahoy_targets.WithTargetScript("build", &ahoy_targets.TargetScript{
+			zen_targets.WithSrcs(map[string][]string{"_srcs": tsc.Srcs}),
+			zen_targets.WithOuts([]string{tsc.Out}),
+			zen_targets.WithPassEnv(tsc.PassEnv),
+			zen_targets.WithEnvVars(tsc.Env),
+			zen_targets.WithVisibility(tsc.Visibility),
+			zen_targets.WithTargetScript("build", &zen_targets.TargetScript{
 				Deps: tsc.Deps,
-				Run: func(target *ahoy_targets.Target, runCtx *ahoy_targets.RuntimeContext) error {
+				Run: func(target *zen_targets.Target, runCtx *zen_targets.RuntimeContext) error {
 					cmd := exec.Command("tsc", "-p", ".")
 					cmd.Dir = target.Cwd
 					cmd.Env = target.GetEnvironmentVariablesList()
